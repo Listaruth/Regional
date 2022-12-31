@@ -1,5 +1,6 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
+import { configureStore } from '@reduxjs/toolkit';
 
 // Définition de l'état initial de l'application
 const initialState = {
@@ -144,7 +145,9 @@ const rootReducer = combineReducers({
   countries: countriesReducer
 });
 
-const store = createStore(rootReducer, applyMiddleware(thunk));
+const store = configureStore(rootReducer, applyMiddleware(thunk));
 
 // Remplissage du tableau countries avec les données de l'API
 store.dispatch(fetchCountries());
+
+export default store;
