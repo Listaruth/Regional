@@ -8,7 +8,7 @@ import api from './api/products'
 import ProductPage from "./ProductPage";
 import './App.css'
 function App() {
-  const [products,SetProducts]= useState([])
+  const [products,SetProducts]= useState(null)
   const [search,setSearch]=useState("")
   useEffect(() => {
     const fetchproducts = async ()=>{
@@ -32,7 +32,7 @@ function App() {
     <div className="App">
       <Nav search={search} setSearch={setSearch}/>
       <Routes>
-        <Route path="/" element={<Home products={products.filter(product => ((product.title).toLowerCase()).includes(search.toLowerCase()))}/>}/>
+        <Route path="/" element={<Home products={products?.filter(product => ((product.title).toLowerCase()).includes(search.toLowerCase()))}/>}/>
         <Route exact path="/about" element={<About />}/>
         <Route exact path="/product/:product" element={<ProductPage/>}/>
         <Route exact path="/newproduct" element={<Newpost />}/>
