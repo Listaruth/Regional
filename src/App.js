@@ -1,18 +1,42 @@
-import './App.css';
-import Menu from './Menu';
-import Q3 from './Q3';
-import Q4 from './Q4';
-import Q5 from './Q5';
-import Q6 from './Q6';
-
+import Nav from "./Nav";
+import { Routes,Route } from "react-router-dom";
+import Newpost from "./Newpost";
+import Home from "./Home";
+import About from "./About";
+import { useEffect, useState } from "react";
+import api from './api/products'
+import ProductPage from "./ProductPage";
+import './App.css'
 function App() {
+  const [products,SetProducts]= useState([])
+  const [search,setSearch]=useState("")
+  useEffect(() => {
+    const fetchproducts = async ()=>{
+      try{
+        const response = await api.get("/products")
+        SetProducts(response.data)
+      }catch(err){
+      if (err.response){
+        console.log(err.response)
+        console.log(err.headers)
+        console.log(err.status)
+      }else{
+        console.log(`Error : ${err.message}`)
+      }
+      }
+    }
+    fetchproducts()
+  }, [])
+  
   return (
     <div className="App">
-      <Menu />
-      <Q3 />
-      <Q4 />
-      <Q5 />
-      <Q6 />
+      <Nav search={search} setSearch={setSearch}/>
+      <Routes>
+        <Route path="/" element={<Home products={products.filter(product => ((product.title).toLowerCase()).includes(search.toLowerCase()))}/>}/>
+        <Route exact path="/about" element={<About />}/>
+        <Route exact path="/product/:product" element={<ProductPage/>}/>
+        <Route exact path="/newproduct" element={<Newpost />}/>
+      </Routes>
     </div>
   );
 }
